@@ -55,11 +55,11 @@ if [[ "$DRY_RUN" != "DRYRUN" ]]; then
 	printf "\n------------ Results of execution on `date` ------------ \n" >> "$LOG_FILE"
 	while read -r commit; do
 		hash=`echo "$commit"  | cut -f1 -d' '`
-	    echo "Processing $commit"
+		echo "Processing $commit"
 		git cherry-pick $hash >> "$LOG_FILE"
-	    if [ $? -ne 0 ]; then
-	        exit 1
-	    fi
+		if [ $? -ne 0 ]; then
+			exit 1
+		fi
 		echo "$hash" >> "$PROCESSED_HASHS_FILE"
 	done <<< "$COMMITS"
 fi
