@@ -36,7 +36,7 @@ LOG_FILE="./git-cherry-pick-list-$BRANCH-$ISSUE-$START.log"
 if [[ "$BRANCH" == "" ]] || [[ "$ISSUE" == "" ]]  || [[ "$START" == "" ]] ; then
     echo "Usage: cherrypick <branch> <issue> <start-date>"
     echo "All parameters are mandatory."
-	 echo "Ex.: cherrypick \"DEV\" \"ABC-123\" \"2015-01-01\""
+    echo "Ex.: cherrypick \"DEV\" \"ABC-123\" \"2015-01-01\""
     exit 1;
 fi
 
@@ -51,16 +51,16 @@ printf "$COMMITS" >> "$COMMIT_LIST_FILE"
 
 shopt -s nocasematch
 if [[ "$DRY_RUN" != "DRYRUN" ]]; then
-printf "\n-------------- Processed hashs on `date` -------------- \n" >> "$PROCESSED_HASHS_FILE"
-printf "\n------------ Results of execution on `date` ------------ \n" >> "$LOG_FILE"
-while read -r commit; do
-	hash=`echo "$commit"  | cut -f1 -d' '`
-    echo "Processing $commit"
-	git cherry-pick $hash >> "$LOG_FILE"
-    if [ $? -ne 0 ]; then
-        exit 1
-    fi
-	echo "$hash" >> "$PROCESSED_HASHS_FILE"
-done <<< "$COMMITS"
+	printf "\n-------------- Processed hashs on `date` -------------- \n" >> "$PROCESSED_HASHS_FILE"
+	printf "\n------------ Results of execution on `date` ------------ \n" >> "$LOG_FILE"
+	while read -r commit; do
+		hash=`echo "$commit"  | cut -f1 -d' '`
+	    echo "Processing $commit"
+		git cherry-pick $hash >> "$LOG_FILE"
+	    if [ $? -ne 0 ]; then
+	        exit 1
+	    fi
+		echo "$hash" >> "$PROCESSED_HASHS_FILE"
+	done <<< "$COMMITS"
 fi
 exit 0
