@@ -44,7 +44,7 @@ fi
 #echo "issue " $ISSUE
 #echo "start " $START
 
-COMMITS=`git log --branches="$BRANCH" --pretty=oneline --after="$START" --grep="$ISSUE" --reverse`   
+COMMITS=`git log "$BRANCH" --pretty=oneline --after="$START" --grep="$ISSUE" --reverse`   
 
 printf "\n------------- Execution on `date` ------------- \n" >> "$COMMIT_LIST_FILE"
 printf "$COMMITS" >> "$COMMIT_LIST_FILE"
