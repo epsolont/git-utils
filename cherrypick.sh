@@ -6,7 +6,8 @@
 # Feel free to use, modify and share this script in anyway you like.
 
 # This script is intended to get all commits with a given issue in the commit
-# message and cherry-pick each one of them to the current branch.
+# message and cherry-pick each one of them to the current branch. It expect 
+# that your credentials are cached.
 
 # It receives three parameters, the branch from which you want to cherry-pick
 # the commits, the issue and a date to start searching for the issue in the 
