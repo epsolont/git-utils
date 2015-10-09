@@ -25,45 +25,45 @@
 # The processed list will be logged into the
 # git-cherry-pick-list-<issue>-<date>.processed file
 
-BRANCH=${1//[[:blank:]]/}
-ISSUE=${2//[[:blank:]]/}
-START=${3//[[:blank:]]/}
-DRY_RUN=${4//[[:blank:]]/}
+branch=${1//[[:blank:]]/}
+issue=${2//[[:blank:]]/}
+start=${3//[[:blank:]]/}
+dry_run=${4//[[:blank:]]/}
 
-COMMIT_LIST_FILE="./git-cherry-pick-list-$BRANCH-$ISSUE-$START"
-PROCESSED_HASHS_FILE="./git-cherry-pick-list-$BRANCH-$ISSUE-$START.processed"
-LOG_FILE="./git-cherry-pick-list-$BRANCH-$ISSUE-$START.log"
+commit_list_file="./git-cherry-pick-list-$branch-$issue-$start"
+processed_hashs_file="./git-cherry-pick-list-$branch-$issue-$start.processed"
+log_file="./git-cherry-pick-list-$branch-$issue-$start.log"
 
-if [[ "$BRANCH" == "" ]] || [[ "$ISSUE" == "" ]]  || [[ "$START" == "" ]] ; then
+if [[ "$branch" == "" ]] || [[ "$issue" == "" ]]  || [[ "$start" == "" ]] ; then
     echo "Usage: cherrypick <branch> <issue> <start-date>"
     echo "All parameters are mandatory."
     echo "Ex.: cherrypick \"DEV\" \"ABC-123\" \"2015-01-01\""
     exit 1;
 fi
 
-#echo "branch " $BRANCH
-#echo "issue " $ISSUE
-#echo "start " $START
+#echo "branch " $branch
+#echo "issue " $issue
+#echo "start " $start
 
-COMMITS=`git log "$BRANCH" --pretty=oneline --after="$START" --grep="$ISSUE" --reverse`   
+commits=`git log "$branch" --pretty=oneline --after="$start" --grep="$issue" --reverse`   
 
-printf "\n------------- Execution on `date` ------------- \n" >> "$COMMIT_LIST_FILE"
-printf "$COMMITS" >> "$COMMIT_LIST_FILE"
+printf "\n------------- Execution on `date` ------------- \n" >> "$commit_list_file"
+printf "$commits" >> "$commit_list_file"
 
 shopt -s nocasematch
-if [[ "$DRY_RUN" != "DRYRUN" ]]; then
-	if [[ ! -z "$COMMITS" ]]; then
-		printf "\n-------------- Processed hashs on `date` -------------- \n" >> "$PROCESSED_HASHS_FILE"
-		printf "\n------------ Results of execution on `date` ------------ \n" >> "$LOG_FILE"
+if [[ "$dry_run" != "DRYRUN" ]]; then
+	if [[ ! -z "$commits" ]]; then
+		printf "\n-------------- Processed hashs on `date` -------------- \n" >> "$processed_hashs_file"
+		printf "\n------------ Results of execution on `date` ------------ \n" >> "$log_file"
 		while read -r commit; do
 			hash=`echo "$commit"  | cut -f1 -d' '`
 			echo "Processing $commit"
-			git cherry-pick $hash >> "$LOG_FILE"
+			git cherry-pick $hash >> "$log_file"
 			if [ $? -ne 0 ]; then
 				exit 1
 			fi
-			echo "$hash" >> "$PROCESSED_HASHS_FILE"
-		done <<< "$COMMITS"
+			echo "$hash" >> "$processed_hashs_file"
+		done <<< "$commits"
 	fi
 fi
 exit 0
