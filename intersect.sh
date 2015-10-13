@@ -11,8 +11,8 @@ if [[ "$issue" == "" ]] ; then
 fi
 
 # get issue's creation date on jira
-startDate=`curl -s -X GET -H "Authorization: Basic amVua2luczpzb2Z0dkA0ZG1pbg==" -H "Content-Type: application/json" \
-"http://ubuntuserver:8090/rest/api/2/search?jql=key=$issue+order+by+duedate&fields=created&maxResults=1" \
+startDate=`curl -s -X GET -H "Authorization: Basic <basic auth here>" -H "Content-Type: application/json" \
+"http://<server>:<port>/rest/api/2/search?jql=key=$issue+order+by+duedate&fields=created&maxResults=1" \
 | jq -r .issues[0].fields.created`
 
 printf "start date $startDate \n" 
@@ -58,7 +58,7 @@ for file in "${uniqueFiles[@]}"; do
 #		printf "git log --oneline --grep=$issue --invert-grep --follow $file";
 		fileLogs="`git log --oneline --grep=$issue --invert-grep --follow $file`"
 		if [ ! -z "$fileLogs" ]; then
-			printf "\n file $file also updated in $fileLogs\n";
+			printf "\n file $file was also updated in $fileLogs\n";
 		fi
 	fi
 done
