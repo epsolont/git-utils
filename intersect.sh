@@ -24,20 +24,23 @@ printf "commits $commits \n"
 
 # iterate over commits getting the updated files in each commit
 issueFiles=()
-while read -r commit; do
- #   echo "$commit"
-	hash=`echo "$commit"  | cut -f1 -d' '`
-#	printf "Processing $commit"
-#	printf " files ->> `git diff-tree --no-commit-id --name-only -r $hash` <<-"
-
-	# put the file list in commit in an array
-	mapfile -t commitFiles < <( git diff-tree --no-commit-id --name-only -r $hash)
-
-	# copy the file list to the final array
-	for fileName in "${commitFiles[@]}"; do
-	   issueFiles+=( "$fileName" )
-	done
-done <<< "$commits"
+if [ ! -z "$commits" ]; then
+	printf "commits $commits \n"
+	while read -r commit; do
+	 #   echo "$commit"
+		hash=`echo "$commit"  | cut -f1 -d' '`
+	#	printf "Processing $commit"
+	#	printf " files ->> `git diff-tree --no-commit-id --name-only -r $hash` <<-"
+	
+		# put the file list in commit in an array
+		mapfile -t commitFiles < <( git diff-tree --no-commit-id --name-only -r $hash)
+	
+		# copy the file list to the final array
+		for fileName in "${commitFiles[@]}"; do
+		   issueFiles+=( "$fileName" )
+		done
+	done <<< "$commits"
+fi
 
 # remove null items 
 for i in "${!issueFiles[@]}"; do
